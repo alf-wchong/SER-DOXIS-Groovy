@@ -1,6 +1,6 @@
 # HL7 message file Send to SFTP Groovy Script
 
-This Groovy script is designed to process HL7 (Health Level Seven) files from a specified source directory, move them to a staging area, upload them to a remote SFTP server, and then delete them from the staging directory upon successful transfer. It is intended to run within a Doxis4 Agent Server or CSBCmd environment, leveraging the `GroovyBlueline` library for Doxis4-specific functionalities, particularly for logging and event handling.
+This Groovy script is designed to process HL7 (Health Level Seven) files from a specified source directory, move them to a staging area, upload them to a remote SFTP server, and then delete them from the staging directory upon successful transfer. It is intended to run within a Doxis4 Agent Server, leveraging the `GroovyBlueline` library for Doxis4-specific functionalities, particularly for logging and event handling.
 
 ## Features
 
@@ -16,10 +16,6 @@ This Groovy script is designed to process HL7 (Health Level Seven) files from a 
 
   * `log.info`: General process flow information.
 
-  * `log.debug`: Detailed step-by-step execution.
-
-  * `log.trace`: Includes full content of the HL7 file and the triggering Doxis4 event document ID for deep debugging (ensure this level is enabled in your Log4j configuration if you need to see file contents).
-
   * `log.warn`: Warnings for non-critical issues (e.g., unable to read file content for trace logging).
 
   * `log.error`: Critical errors during file processing or SFTP transfer.
@@ -34,13 +30,13 @@ This Groovy script is designed to process HL7 (Health Level Seven) files from a 
 
 To run this script, you will need:
 
-* **Doxis4 Agent Server or CSBCmd environment**: The script is designed to run within the Doxis4 ecosystem.
+* **Doxis4 Agent Server: The script is designed to run within the Doxis4 ecosystem.
 
 * **GroovyBlueline Library**: Specifically `GroovyBlueline80p1.jar` or a compatible version, which provides the `CSBScript` base class.
 
 * **JSch Library**: The `com.jcraft.jsch` library (a pure Java SSH2 client) is required for SFTP connectivity. This JAR file (`jsch.jar`) must be available on the classpath of your Groovy environment (e.g., in `agents/lib/custom` for Agent Server or `csbcli/lib/custom` for CSBCmd).
 
-* **Configured Environment Variables**: The script relies on several environment variables (or similarly configured global properties in your Doxis4 setup) for SFTP connection details and file paths:
+* **Configured Environment Variables**: The script relies on several environment variables (see table below) for SFTP connection details and file paths:
 
   * `SFTPHOST`: The SFTP server hostname or IP address.
 
@@ -54,13 +50,13 @@ To run this script, you will need:
 
 ## Setup
 
-1. **Deploy GroovyBlueline**: Ensure `GroovyBlueline80p1.jar` (or equivalent) is deployed to the appropriate `lib/custom` directory in your Doxis4 environment.
+1. Create a new agent definition in the Doxis4 Admin Client.
+   
+2. **Deploy JSch**: Import `jsch.jar` file using the upload library function for the new agent.
 
-2. **Deploy JSch**: Place the `jsch.jar` file into the same `lib/custom` directory as GroovyBlueline.
+3. **Configure Environment Variables**: Set the five required environment variables (`SFTPHOST`, `SFTPDESTDIR`, `SFTPUSER`, `SFTPPASS`, `SOURCEDIR`) as the new agent's parameters (see table below).
 
-3. **Configure Environment Variables**: Set the five required environment variables (`SFTPHOST`, `SFTPDESTDIR`, `SFTPUSER`, `SFTPPASS`, `SOURCEDIR`) in your Doxis4 Agent Server configuration or your CSBCmd execution environment. **Warning:** Storing sensitive information like `SFTPPASS` directly in environment variables might not be the most secure approach for production. Consider more secure credential management solutions for actual deployments.
-
-4. **Place the Groovy Script**: Save the provided Groovy code as a `.groovy` file (e.g., `HL7FileProcessor.groovy`) in the designated script directory for your Doxis4 Agent or CSBCmd setup.
+4. **Place the Groovy Script**: Save the provided Groovy code into the script editor for the new agent.
 
 ## Usage
 
